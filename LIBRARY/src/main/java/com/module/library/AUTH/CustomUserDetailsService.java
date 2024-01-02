@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 userEntity.getUsername(),
                 userEntity.getPhoneNumber(),
                 userEntity.getEmail(),
-                new ArrayList<>(List.of(new SimpleGrantedAuthority(userEntity.getAuthority())))
+                new ArrayList<>(List.of(new SimpleGrantedAuthority(userEntity.getRole())))
         );
     }
 }

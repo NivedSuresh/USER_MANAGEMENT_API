@@ -23,7 +23,7 @@ public class JwtServiceImpl implements JwtService {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + 2139999999))
                 .claim("email", authentication.getName())
-                .claim("authority", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority))
+                .claim("role", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority))
                 .signWith(key).compact();
     }
 
@@ -51,7 +51,7 @@ public class JwtServiceImpl implements JwtService {
                         .parseClaimsJws(jwt.substring(7))
                         .getBody();
 
-        return  new String[]{String.valueOf(claims.get("email")), String.valueOf(claims.get("authority"))};
+        return  new String[]{String.valueOf(claims.get("email")), String.valueOf(claims.get("role"))};
     }
 
 }

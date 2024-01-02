@@ -6,11 +6,15 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 public class SignUpRequest {
+
+    String id;
 
     @Email
     @NotEmpty(message = "The entered email is not valid.")
@@ -26,5 +30,9 @@ public class SignUpRequest {
 
     @Size(message = "Phone number should be exactly 10 digits.", min = 10, max = 10)
     private String phoneNumber;
+
+    private String role;
+
+    private String profilePicture;
 
 }
