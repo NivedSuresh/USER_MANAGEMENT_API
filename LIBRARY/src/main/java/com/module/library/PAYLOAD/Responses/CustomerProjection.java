@@ -1,8 +1,11 @@
 package com.module.library.PAYLOAD.Responses;
 
 public interface CustomerProjection {
+
+    String getId();
     String getEmail();
     String getUsername();
     String getPhoneNumber();
-    String getProfilePicture();
+    String getPicture();
+    String getRole();
 }

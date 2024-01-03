@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepo userRepo;
 
     @Autowired
-    public CustomUserDetailsService(UserRepo userRepo) {
+    public UserDetailsServiceImpl(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if(userEntity == null) throw new BadCredentialsException("Credentials doesn't exist");
 
-        return new CustomUserDetails(
+        return new UserDetailsImpl(
                 userEntity.isBanned(),
                 userEntity.getPassword(),
                 userEntity.getUsername(),

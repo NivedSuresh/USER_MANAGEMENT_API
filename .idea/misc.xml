@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$/USER" />
+    <file type="web" url="file://$PROJECT_DIR$/ADMIN" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -17,6 +17,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/CUSTOMER/pom.xml" />
         <option value="$PROJECT_DIR$/USER/ADMIN/pom.xml" />
         <option value="$PROJECT_DIR$/USER/pom.xml" />
       </set>

@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class AuthenticationResponse {
-    private String jwtToken;
-    private  String message;
+    private String JWT;
+    private String email;
     private String role;
 }

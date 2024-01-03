@@ -5,6 +5,7 @@ import com.module.library.EXCEPTIONS.DatabaseConnectionFailedException;
 import com.module.library.EXCEPTIONS.InvalidStateException;
 import com.module.library.MODELS.UserEntity;
 import com.module.library.PAYLOAD.Requests.SignUpRequest;
+import com.module.library.PAYLOAD.Responses.CustomerProjection;
 import com.module.library.REPOS.UserRepo;
 import com.module.library.SERVICES.UserService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,9 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> getAllUsers() {
-        try{ List<UserEntity> users =  userRepo.findAll();
-            System.out.println(users); return users;}
+    public List<CustomerProjection> getAllUsers() {
+        try{ return userRepo.findAllByRole("CUSTOMER"); }
         catch (Exception e){
             e.printStackTrace();
             throw new DatabaseConnectionFailedException("Unable to initiate connection with the server, try after sometime.");
@@ -61,6 +61,8 @@ public class UserServiceImpl implements UserService {
                 throw new AccountAlreadyExistsException("The email which you're trying to register already exists");
             if(!Objects.equals(signUpRequest.getPassword(), signUpRequest.getConfirmPassword()))
                 throw new InvalidStateException("Passwords doesn't match");
+
+            System.out.println(signUpRequest);
 
             return userRepo.save(
                     new UserEntity(

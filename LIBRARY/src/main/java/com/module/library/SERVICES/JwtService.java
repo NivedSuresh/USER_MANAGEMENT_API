@@ -7,7 +7,7 @@ public interface JwtService {
     String JWT_HEADER = "Authorization";
 
     String generateJwt(Authentication authentication);
-    String[] getDataFromJwt(String jwt);
+    String[] getCredentialsFromJwt(String jwt);
 
     boolean validateJwt(String jwt);
 }

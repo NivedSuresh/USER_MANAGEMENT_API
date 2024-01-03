@@ -1,30 +1,21 @@
-package com.module.library.CONFIG;
+package com.module.library.AUTH;
 
-import com.module.library.AUTH.CustomUserDetailsService;
-import com.module.library.REPOS.UserRepo;
+import com.module.library.AUTH.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class BEANS{
 
-    CustomUserDetailsService userDetailsService;
+    UserDetailsServiceImpl userDetailsService;
 
-    public BEANS(CustomUserDetailsService customUserDetailsService) {
-        this.userDetailsService = customUserDetailsService;
+    public BEANS(UserDetailsServiceImpl userDetailsServiceImpl) {
+        this.userDetailsService = userDetailsServiceImpl;
     }
 
     @Bean

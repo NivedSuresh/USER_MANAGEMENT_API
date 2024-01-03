@@ -11,7 +11,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtServiceImpl implements JwtService {
@@ -19,11 +21,12 @@ public class JwtServiceImpl implements JwtService {
     private final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
     private final SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
     public String generateJwt(Authentication authentication){
+        String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
         return Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + 2139999999))
                 .claim("email", authentication.getName())
-                .claim("role", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority))
+                .claim("role", role)
                 .signWith(key).compact();
     }
 
@@ -44,12 +47,13 @@ public class JwtServiceImpl implements JwtService {
         return false;
     }
 
-    public String[] getDataFromJwt(String jwt){
+    public String[] getCredentialsFromJwt(String jwt){
         Claims claims = Jwts.parserBuilder()
                         .setSigningKey(key)
                         .build()
                         .parseClaimsJws(jwt.substring(7))
                         .getBody();
+
 
         return  new String[]{String.valueOf(claims.get("email")), String.valueOf(claims.get("role"))};
     }

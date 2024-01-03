@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.module.admin</groupId>
-    <artifactId>ADMIN</artifactId>
+    <artifactId>USER</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ADMIN</name>
     <description>ADMIN</description>

@@ -17,7 +17,6 @@
   <modules>
     <module>LIBRARY</module>
     <module>ADMIN</module>
-    <module>CUSTOMER</module>
   </modules>
 
   <dependencies>
