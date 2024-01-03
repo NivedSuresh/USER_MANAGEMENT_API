@@ -1,4 +1,4 @@
-package com.module.admin.controllers;
+package com.module.user.controllers;
 
 import com.module.library.SERVICES.UserService;
 import org.springframework.http.HttpStatus;

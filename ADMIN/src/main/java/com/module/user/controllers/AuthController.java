@@ -1,10 +1,10 @@
-package com.module.admin.controllers;
+package com.module.user.controllers;
 
+import com.module.user.token_service.TokenService;
 import com.module.library.PAYLOAD.Requests.LoginRequest;
 import com.module.library.PAYLOAD.Requests.SignUpRequest;
 import com.module.library.PAYLOAD.Responses.AuthenticationResponse;
 import com.module.library.SERVICES.AuthenticationService;
-import com.module.library.SERVICES.IMPLS.JwtServiceImpl;
 import com.module.library.SERVICES.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -22,17 +22,16 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     AuthenticationService authenticationService;
-    JwtServiceImpl jwtService;
-
     UserService userService;
     UserListController userListController;
+    TokenService tokenService;
 
-    public AuthController(AuthenticationService authenticationService, JwtServiceImpl jwtService,
-                          UserService userService, UserListController userListController) {
+    public AuthController(AuthenticationService authenticationService, UserService userService,
+                          UserListController userListController, TokenService tokenService) {
         this.authenticationService = authenticationService;
-        this.jwtService = jwtService;
         this.userService = userService;
         this.userListController = userListController;
+        this.tokenService = tokenService;
     }
 
     @InitBinder
@@ -50,7 +49,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return new AuthenticationResponse(
-                jwtService.generateJwt(authentication), loginRequest.getEmail(),
+                tokenService.generateToken(authentication), loginRequest.getEmail(),
                 authentication.getAuthorities().stream().findFirst().get().getAuthority()
         );
     }
@@ -66,7 +65,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(bindingResult.getFieldErrors().stream()
                             .map(DefaultMessageSourceResolvable::getDefaultMessage).toList()
-                    );
+            );
         }
         try{
             userService.addUserToDB(signUpRequest);
