@@ -5,21 +5,21 @@ import com.module.library.EXCEPTIONS.DatabaseConnectionFailedException;
 import com.module.library.EXCEPTIONS.InvalidStateException;
 import com.module.library.MODELS.UserEntity;
 import com.module.library.PAYLOAD.Requests.SignUpRequest;
-import com.module.library.PAYLOAD.Responses.CustomerProjection;
+import com.module.library.PAYLOAD.Responses.UserProjection;
 import com.module.library.REPOS.UserRepo;
 import com.module.library.SERVICES.UserService;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
-
 
     UserRepo userRepo;
     PasswordEncoder passwordEncoder;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<CustomerProjection> getAllUsers() {
+    public List<UserProjection> getAllUsers() {
         try{ return userRepo.findAllByRole("CUSTOMER"); }
         catch (Exception e){
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity addUserToDB(SignUpRequest signUpRequest){
+    public void addUserToDB(SignUpRequest signUpRequest){
         try{
             if (userRepo.existsByEmail(signUpRequest.getEmail()) && signUpRequest.getId() == null)
                 throw new AccountAlreadyExistsException("The email which you're trying to register already exists");
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
             System.out.println(signUpRequest);
 
-            return userRepo.save(
+            userRepo.save(
                     new UserEntity(
                             signUpRequest.getId(),
                             signUpRequest.getEmail(),
@@ -102,9 +102,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(String id) {
-        try{
-            userRepo.deleteById(id);
-        }catch (Exception e){
+        try{ userRepo.deleteById(id); }
+        catch (Exception e){
+            throw new DatabaseConnectionFailedException("Unable to initiate connection with the server, try after sometime.");
+        }
+    }
+
+    @Override
+    public UserProjection findUserProjectionWithEmail(Map<String, Object> claims) {
+        if(claims == null) throw new BadCredentialsException("Cannot extract user information");
+        UserProjection customer = userRepo.findByEmailAndRole((String) claims.get("sub"), (String) claims.get("scope"));
+        if(customer==null) throw new InvalidStateException("Unable to find user credentials with provided claims");
+        return customer;
+    }
+
+    @Override
+    public void saveUser(UserEntity user) {
+        try{ userRepo.save(user); }
+        catch (Exception e){
+            e.printStackTrace();
             throw new DatabaseConnectionFailedException("Unable to initiate connection with the server, try after sometime.");
         }
     }

@@ -1,6 +1,6 @@
 package com.module.library.PAYLOAD.Responses;
 
-public interface CustomerProjection {
+public interface UserProjection {
 
     String getId();
     String getEmail();
