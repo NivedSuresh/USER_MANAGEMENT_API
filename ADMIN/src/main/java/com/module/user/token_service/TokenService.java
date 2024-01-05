@@ -37,12 +37,4 @@ public class TokenService {
     }
 
 
-//    public String getSubjectFromToken(String token){
-//        return getClaimsSet(token).getSubject();
-//    }
-//
-//    private JwtClaimAccessor getClaimsSet(String token) {
-//        return ;
-//    }
-
 }

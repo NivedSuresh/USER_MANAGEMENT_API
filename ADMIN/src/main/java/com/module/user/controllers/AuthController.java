@@ -11,11 +11,14 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 
 @RestController
@@ -40,6 +43,13 @@ public class AuthController {
         dataBinder.registerCustomEditor(String.class, ste);
     }
 
+    /*
+        after logging out spring will automatically redirect to get /login?error,
+        therefore here im using this filler to override that default behavior
+    */
+    @GetMapping("/logout-success")
+    public void filler(){}
+
     @PostMapping("/login")
     public AuthenticationResponse loginHandler(@RequestBody() @Valid LoginRequest loginRequest){
 
@@ -47,6 +57,8 @@ public class AuthController {
 
         Authentication authentication = authenticationService.loginUser(loginRequest);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        System.out.println("Returned Authentication : " + authentication);
 
         return new AuthenticationResponse(
                 tokenService.generateToken(authentication), loginRequest.getEmail(),
@@ -75,6 +87,12 @@ public class AuthController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(){
+        System.out.println("Logout triggered");
+        return ResponseEntity.ok(authenticationService.logoutUser());
     }
 
 }

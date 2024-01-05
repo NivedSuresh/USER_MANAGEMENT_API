@@ -117,8 +117,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(UserEntity user) {
-        try{ userRepo.save(user); }
+    public UserEntity saveUser(UserEntity user) {
+        try{ return userRepo.save(user); }
         catch (Exception e){
             e.printStackTrace();
             throw new DatabaseConnectionFailedException("Unable to initiate connection with the server, try after sometime.");

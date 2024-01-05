@@ -43,9 +43,11 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
         security.authenticationProvider(authenticationProvider);
 
-        security.authorizeHttpRequests(http -> http.requestMatchers("/login", "/add_user").permitAll()
+        security.authorizeHttpRequests(http -> http.requestMatchers("/login", "/add_user", "/logout-success").permitAll()
                     .requestMatchers("/admin/**").hasAuthority("SCOPE_ADMIN")
                     .anyRequest().authenticated());
+
+        security.logout(logout -> logout.logoutSuccessUrl("/logout-success"));
 
         security.oauth2ResourceServer(http -> http.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)));
         return security.build();

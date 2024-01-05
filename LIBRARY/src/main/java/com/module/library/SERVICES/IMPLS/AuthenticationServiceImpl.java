@@ -1,12 +1,15 @@
 package com.module.library.SERVICES.IMPLS;
 
+import com.module.library.EXCEPTIONS.InvalidStateException;
 import com.module.library.REPOS.UserRepo;
 import com.module.library.PAYLOAD.Requests.LoginRequest;
 import com.module.library.SERVICES.AuthenticationService;
 import jakarta.validation.Valid;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +37,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }catch (Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public Authentication logoutUser() {
+        try{
+            SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthenticationToken(
+                    "Anonymous Authentication",
+                    null,
+                    null
+            ));
+            return SecurityContextHolder.getContext().getAuthentication();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new InvalidStateException("Unable to logout!");
         }
     }
 }

@@ -26,6 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+        System.out.println(username);
+
         UserEntity userEntity = userRepo.findByEmail(username);
 
         if(userEntity == null) throw new BadCredentialsException("Credentials doesn't exist");

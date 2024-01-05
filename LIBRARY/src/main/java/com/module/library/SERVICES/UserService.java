@@ -19,5 +19,5 @@ public interface UserService {
 
     UserProjection findUserProjectionWithEmail(Map<String, Object> claims);
 
-    void saveUser(UserEntity user);
+    UserEntity saveUser(UserEntity user);
 }
